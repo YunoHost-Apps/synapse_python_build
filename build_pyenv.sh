@@ -62,7 +62,7 @@ pip3 install -I --upgrade pip
 pip3 install -I --upgrade setuptools wheel cffi
 pip3 install -I --upgrade ndg-httpsclient psycopg2 lxml jinja2
 pip3 install -I --upgrade matrix-synapse==$app_version matrix-synapse-ldap3
-pip3 freeze > $old_pwd/${result_prefix_name}-build1_requirement.txt
+pip3 freeze | grep -v 'pkg_resources' > $old_pwd/${result_prefix_name}-build1_requirement.txt
 
 # Quit virtualenv
 set +u; deactivate; set -u
