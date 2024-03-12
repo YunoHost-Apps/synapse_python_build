@@ -53,15 +53,15 @@ mkdir -p $path_to_build
 python3 -m venv --copies $path_to_build
 
 # Go in virtualenv
-old_pwd="$PWD"
+old_pwd="${PWD/%\//}"
 pushd $path_to_build
 set +u; source bin/activate; set -u
 
 # Install source and build binary
-pip3 install -I --upgrade pip
-pip3 install -I --upgrade setuptools wheel cffi
-pip3 install -I --upgrade ndg-httpsclient psycopg2 lxml jinja2
-pip3 install -I --upgrade matrix-synapse==$app_version matrix-synapse-ldap3
+pip3 install --upgrade pip
+pip3 install --upgrade setuptools wheel cffi
+pip3 install --upgrade ndg-httpsclient psycopg2 lxml jinja2
+pip3 install --upgrade matrix-synapse==$app_version matrix-synapse-ldap3
 pip3 freeze | grep -v 'pkg_resources' > $old_pwd/${result_prefix_name}-build1_requirement.txt
 
 # Quit virtualenv
@@ -71,7 +71,7 @@ cd ..
 # Build archive of binary and put everything on correct path to be used by auto update script
 tar -czf "${result_prefix_name}-bin1_armv7l.tar.gz" "$dir_name"
 sha256sumarchive=$(sha256sum "${result_prefix_name}-bin1_armv7l.tar.gz" | cut -d' ' -f1)
-mv "${result_prefix_name}-bin1_armv7l.tar.gz" "$old_pwd"
+mv "${result_prefix_name}-bin1_armv7l.tar.gz" "$old_pwd"/
 echo $sha256sumarchive > "$old_pwd/${result_prefix_name}-bin1_armv7l-sha256.txt"
 
 popd
