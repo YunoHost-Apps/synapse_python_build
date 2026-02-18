@@ -9,7 +9,10 @@ path_to_build="/opt/yunohost/$dir_name"
 
 #################################################################
 
-app_version="$1"
+# commit of the sources to be built
+app_version="e873f9a"
+#app_version="$1"
+# architecture to be built
 result_suffix_name="$2"
 #result_prefix_name="$2"
 
@@ -60,15 +63,16 @@ old_pwd="${PWD/%\//}"
 
 git clone https://github.com/erikjohnston/synapse-find-unreferenced-state-groups.git $path_to_build
 pushd $path_to_build
+git reset --hard $app_version
 cargo build
 
 cd ..
 
 # Build archive of binary and put everything on correct path to be used by auto update script
-tar -czf "${dir_name}-bin1_$result_suffix_name.tar.gz" "$dir_name"
-sha256sumarchive=$(sha256sum "${dir_name}-bin1_$result_suffix_name.tar.gz" | cut -d' ' -f1)
-mv "${dir_name}-bin1_$result_suffix_name.tar.gz" "$old_pwd"/
-echo $sha256sumarchive > "$old_pwd/${dir_name}-bin1_$result_suffix_name-sha256.txt"
+tar -czf "${dir_name}_${app_version}-bin1_$result_suffix_name.tar.gz" "$dir_name"
+sha256sumarchive=$(sha256sum "${dir_name}_${app_version}-bin1_$result_suffix_name.tar.gz" | cut -d' ' -f1)
+mv "${dir_name}_${app_version}-bin1_$result_suffix_name.tar.gz" "$old_pwd"/
+echo $sha256sumarchive > "$old_pwd/${dir_name}_${app_version}-bin1_$result_suffix_name-sha256.txt"
 
 popd
 
